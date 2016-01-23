@@ -15,7 +15,6 @@ export default class App extends StyledComponent {
     return (
       <View>
         <Text ref="text">Welcome to React Native in Web!</Text>
-        {this.props.children}
       </View>
     )
   }

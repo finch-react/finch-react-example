@@ -6,7 +6,6 @@ import React, {
 import App from './components/App';
 import './themes';
 
-
 AppRegistry.registerComponent('ReactNativeWebExample', () => App);
 
 if (Platform.OS == 'web') {

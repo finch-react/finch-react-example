@@ -26,7 +26,7 @@ module.exports = {
   devtool: 'source-map',
   resolve: {
     alias: {
-      'react-native': 'react-web',
+      'react-native': path.resolve(__dirname, "../src/web/index.js"),
       'ReactNativeART': 'react-art',
     },
     extensions: ['', '.js', '.jsx'],

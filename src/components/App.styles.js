@@ -2,7 +2,7 @@ export default [
   {
     text: {
       color: "blue",
-      fontSize: 30,
+      fontSize: 40,
     }
   },
   (t)=>({

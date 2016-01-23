@@ -31,9 +31,9 @@ module.exports = {
     },
     extensions: ['', '.js', '.jsx'],
   },
-  entry: isProd? [
+  entry: isProd ? [
     config.paths.index
-  ]: [
+  ] : [
     'webpack-dev-server/client?http://' + IP + ':' + PORT,
     'webpack/hot/only-dev-server',
     config.paths.index,
@@ -49,12 +49,12 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       'process.env': {
-        'NODE_ENV': JSON.stringify(isProd? PROD: DEV),
+        'NODE_ENV': JSON.stringify(isProd ? PROD : DEV),
       }
     }),
-    isProd? new webpack.ProvidePlugin({
+    isProd ? new webpack.ProvidePlugin({
       React: "react"
-    }): new webpack.HotModuleReplacementPlugin(),
+    }) : new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
     new HtmlPlugin(),
   ],
@@ -64,13 +64,17 @@ module.exports = {
       loader: 'json',
     }, {
       test: /\.jsx?$/,
-      loaders: ['react-hot', 'babel?stage=1'],
+      loaders: ['react-hot', 'babel-loader?' + JSON.stringify({
+          cacheDirectory: true,
+          presets: ['es2015', 'stage-0', 'react'],
+          plugins: ['add-module-exports']
+      })],
       include: [config.paths.src],
       exclude: [
         /node_modules(?!\/finch-react)/,
         /finch-react-styles/,
         /output/
       ]
-    }, ]
+    },]
   }
 };

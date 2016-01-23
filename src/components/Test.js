@@ -3,7 +3,7 @@ import React, {
   View,
   Text,
   StyledComponent,
-} from 'finch-react';
+} from '../finchReact';
 
 export default class Test extends StyledComponent {
   render() {

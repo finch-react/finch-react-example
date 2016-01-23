@@ -1,1 +1,1 @@
-import './src/index.ios';
+import './src/index';

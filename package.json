@@ -9,7 +9,6 @@
   "dependencies": {
     "react": "^0.14.6",
     "react-dom": "^0.14.6",
-    "finch-react": "finch-react/finch-react",
     "react-native": "^0.17.0",
     "react-native-cli": "^0.1.10",
     "react-web": "^0.1.3",

@@ -5,6 +5,7 @@ import React, {
 } from 'react-native';
 import App from './components/App';
 import './themes';
+import './lib/Theme';
 
 AppRegistry.registerComponent('ReactNativeWebExample', () => App);
 

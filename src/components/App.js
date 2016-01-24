@@ -11,10 +11,15 @@ export default class App extends StyledComponent {
     styles: styles
   };
 
+  constructor(...args) {
+    super(...args);
+    this.state = {a:1};
+  }
+
   render() {
     return (
       <View>
-        <Text ref="text">Welcome to React Native in Web!</Text>
+        <Text ref="text" onClick={()=>this.setState((s)=>({a:s.a+1}))}>Welcome to React Native in Web1</Text>
       </View>
     )
   }

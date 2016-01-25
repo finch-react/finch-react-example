@@ -11,7 +11,7 @@ let templates = {};
 function style(component) {
   if (component.__theme !== this) {
     if (component.__theme) {
-      component.__theme.unmount();
+      //component.__theme.unmount();
     }
     component.__theme = this;
     if(component.__style) {

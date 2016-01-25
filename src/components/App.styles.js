@@ -12,5 +12,13 @@ export default $=>[
     text: {
       color: "green"
     }
-  }
+  },
+  {
+    $props: {
+      open: true
+    },
+    text: {
+      color: "blue"
+    }
+  },
 ];

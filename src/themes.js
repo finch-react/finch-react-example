@@ -13,7 +13,7 @@ Theme.register({
 });
 
 Theme.override("dark", {
-  brandColorAccent: "red1"
+  brandColorAccent: "blue"
 });
 
 

@@ -3,6 +3,10 @@ import React, {
 } from 'react-native';
 
 export default class Theme extends Component {
+  static childContextTypes = {
+    theme: React.PropTypes.object
+  };
+
   render() {
     return this.props.children;
   }
@@ -11,7 +15,3 @@ export default class Theme extends Component {
     return {...this.context, theme: this.props.name};
   }
 }
-
-Theme.childContextTypes = {
-  theme: React.PropTypes.object
-};

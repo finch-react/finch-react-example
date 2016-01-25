@@ -14,7 +14,16 @@ function style(component) {
       component.__theme.unmount();
     }
     component.__theme = this;
-    component.__style = new Style(this, component.styles).use();
+    if(component.__style) {
+      component.__style.unuse();
+    }
+    if(!component.constructor._id) {
+      component.constructor._id = ++id;
+    }
+    if(!this.componentStyles[component.constructor._id]) {
+      this.componentStyles[component.constructor._id] = new Style(this, component.styles).use();
+    }
+    component.__style = this.componentStyles[component.constructor._id];
   }
   return component.__style;
 }
@@ -51,6 +60,7 @@ export default class Theme {
     let theme = themeFunction.bind(themeProps);
     theme.style = style.bind(theme);
     theme.unmount = unmount.bind(theme);
+    theme.componentStyles = {};
     let template = templates[name];
     if (!template) {
       return themeProps;

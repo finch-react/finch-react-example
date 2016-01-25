@@ -1,5 +1,6 @@
 import Theme from './Theme';
 import reactTransform from './reactTransform';
+import {Platform} from 'react-native';
 
 export default function decorateInstance(component) {
   let render = component.render;
@@ -8,8 +9,11 @@ export default function decorateInstance(component) {
     let style = theme.style(component);
     return reactTransform(render.call(component), (element, isMain)=> {
       let extraProps = {};
-      extraProps.style=style.style(element, component.props, isMain);
-      extraProps.className=style.className(element, component.props, isMain);
+      if (Platform.OS !== 'web') {
+        extraProps.style = style.style(element, component.props, isMain);
+      } else {
+        extraProps.className = style.className(element, component.props, isMain);
+      }
       if (element.props.className) {
         extraProps.className += ' ' + element.props.className;
       }

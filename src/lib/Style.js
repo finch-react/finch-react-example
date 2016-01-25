@@ -1,7 +1,11 @@
 import invariant from 'fbjs/lib/invariant';
 import _ from 'lodash';
+import {Platform} from 'react-native';
+import CSSPropertyOperations from 'react/lib/CSSPropertyOperations';
+import {canUseDOM} from 'fbjs/lib/ExecutionEnvironment';
 
 let styleId = -1;
+let cssRefsCounters = {};
 
 export default class Style {
   constructor(theme, styles) {
@@ -63,6 +67,45 @@ export default class Style {
   }
 
   use() {
+    this.buildStyles();
+
+    if (Platform.OS === 'web') {
+      let styles = this._css;
+      if (canUseDOM) {
+        let id = `s${this._id}`;
+        cssRefsCounters[id] = (typeof cssRefsCounters[id] !== 'undefined') ? ++cssRefsCounters[id] : 1;
+        if (cssRefsCounters[id] === 1) {
+          let style = document.createElement('style');
+          style.setAttribute('data-css-id', id);
+          style.type = 'text/css';
+          style.innerHTML = styles;
+          document.getElementsByTagName('head')[0].appendChild(style);
+        }
+      } else {
+        //TODO write css file on server
+      }
+    }
+
+    return this;
+  }
+
+  unuse() {
+    if (Platform.OS === 'web' && canUseDOM) {
+      let id = `s${this._id}`;
+      cssRefsCounters[id] = --cssRefsCounters[id];
+      if (cssRefsCounters[id] === 0) {
+        let style = document.querySelectorAll(`style[data-css-id=\'${id}']`);
+        style[0].parentNode.removeChild(style[0]);
+      }
+    }
+    return this;
+  }
+
+  buildClassName(id, name) {
+    return ['c', this._id.toString(32), id.toString(32), name].join('_');
+  }
+
+  buildStyles() {
     let locals = {};
     let styles = this._styles;
     let css = [];
@@ -82,25 +125,31 @@ export default class Style {
           local.$props = style.$props;
         }
         locals[name].push(local);
+        ;
+        if (Platform.OS === 'web' && canUseDOM) {
+          css.push(`.${local.className} {${CSSPropertyOperations.createMarkupForStyles(style[name])}}\n`);
+        }
       }
     }
     this._locals = locals;
-    this._css = css.join();
-    return this;
-  }
-
-  unuse() {
-    return this;
-  }
-
-  buildClassName(id, name) {
-    return ['c', this._id, id, name].join('_');
+    if (Platform.OS === 'web' && canUseDOM) {
+      this._css = css.join('');
+    }
   }
 
   validateProps(style, props) {
-    if (style.$props) {
-      if (!style.$props(props)) {
-        return false;
+    var $props = style.$props;
+      if ($props) {
+      if (_.isFunction($props)) {
+        if (!$props(props)) {
+          return false;
+        }
+      } else {
+        for (let name in $props) {
+          if ($props[name] !== props[name]) {
+            return false;
+          }
+        }
       }
     }
     return true;

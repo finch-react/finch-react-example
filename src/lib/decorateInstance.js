@@ -9,6 +9,10 @@ export default function decorateInstance(component) {
     return reactTransform(render.call(component), (element, isMain)=> {
       let extraProps = {};
       extraProps.style=style.style(element, component.props, isMain);
+      extraProps.className=style.className(element, component.props, isMain);
+      if (element.props.className) {
+        extraProps.className += ' ' + element.props.className;
+      }
       if (element.props.element && element.props.events) {
         let events = element.props.events;
         if (_.isString(events)) {

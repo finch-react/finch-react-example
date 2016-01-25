@@ -3,6 +3,9 @@ export default $=>[
     text: {
       color: "red"
     },
+    button: {
+      color: "red"
+    }
   },
   {
     $props: props => props.open,

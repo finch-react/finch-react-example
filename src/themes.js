@@ -1,17 +1,21 @@
-import Themes from './lib/Themes';
+import Theme from './lib/Theme';
 
-Themes.register({
+Theme.register({
   brandColorDefault: "red",
   brandColorAccent: "blue"
 });
 
-Themes.register({
+Theme.register({
   brandColorAccent: "green",
   dom2: {
-    "headerColor": (t)=>t.get("brandColorAccent", "black")
+    "headerColor": $=>$("brandColorAccent", "black")
   }
 });
 
-Themes.override("dark", {
-  brandColorDefault: (t)=>t.dom2.headerColor
+Theme.override("dark", {
+  brandColorAccent: "red1"
 });
+
+
+
+

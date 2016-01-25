@@ -1,20 +1,13 @@
-export default [
+export default $=>[
   {
     text: {
-      color: "blue",
-      fontSize: 10,
-    }
-  },
-  (t)=>({
-    "text:is-open": {color: t.get("brandColorDefault", "yellow")},
-    "text:is-open-false": {color: "green"}
-  }),
-  {
-    "text:is-open": {
-      "backgroundColor": "blue"
+      color: "red"
     },
-    "text:not-open": {
-      "backgroundColor": "red"
+  },
+  {
+    $props: props => props.open,
+    text: {
+      color: "green"
     }
   }
 ];

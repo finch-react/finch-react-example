@@ -1,5 +1,6 @@
 import invariant from 'fbjs/lib/invariant';
 import _ from 'lodash';
+import Style from './Style';
 
 const DEFAULT_NAME = 'default';
 
@@ -7,13 +8,33 @@ let id = 0;
 let themes = {};
 let templates = {};
 
-const flatMap = (array, callback) =>
-  Array.prototype.concat.apply([], array.map(callback));
+function style(component) {
+  if (component.__theme !== this) {
+    if (component.__theme) {
+      component.__theme.unmount();
+    }
+    component.__theme = this;
+    component.__style = new Style(this, component.styles).use();
+  }
+  return component.__style;
+}
 
-const prepareTemplate = (template)=> {
-  return [template];
-};
+function themeFunction(name, def) {
+  if (!name) {
+    return _.cloneDeep(this);
+  }
+  try {
+    return eval("this." + name)
+  } catch (e) {
+    return def;
+  }
+}
 
+function unmount(component) {
+  if (component.__style) {
+    component.__style.unuse();
+  }
+}
 
 export default class Theme {
   static get(name = DEFAULT_NAME) {
@@ -25,31 +46,41 @@ export default class Theme {
   }
 
   static build(name = DEFAULT_NAME) {
-    let themeFunction = function (name, def) {
-      if (!name) {
-        return _.cloneDeep(this);
-      }
-      try {
-        return eval("this." + name)
-      } catch (e) {
-        return def;
-      }
-    };
-    let theme = {};
+    let themeProps = {};
+
+    let theme = themeFunction.bind(themeProps);
+    theme.style = style.bind(theme);
+    theme.unmount = unmount.bind(theme);
     let template = templates[name];
     if (!template) {
-      return theme;
+      return themeProps;
     }
     if (name != DEFAULT_NAME) {
       template = [...templates['default'], ...template];
     }
     for (let i = 0; i < template.length; i++) {
-      Array.prototype.concat.apply([], [template[i](themeFunction.bind(theme))]).forEach(rule=>Object.assign(theme, rule));
+      Array.prototype.concat.apply([], [template[i](theme)]).forEach(rule=>Object.assign(themeProps, rule));
     }
+
+    Object.assign(themeProps, Theme.callFunctionsRecursively(themeProps, theme));
+
 
     //TODO event
 
-    return themes[name] = themeFunction.bind(theme);
+    return themes[name] = theme;
+  }
+
+  static callFunctionsRecursively(o, arg) {
+    for (let propName in o) {
+      let val = o[propName];
+      if (_.isPlainObject(val)) {
+        o[propName] = Theme.callFunctionsRecursively(val, arg);
+      }
+      if (_.isFunction(val)) {
+        o[propName] = val(arg);
+      }
+    }
+    return o;
   }
 
 
@@ -63,7 +94,6 @@ export default class Theme {
         clearTimeout(theme._timeout);
       }
       theme._timeout = setTimeout(()=> {
-        delete theme._timeout;
         Theme.build(name);
       }, 0);
     }
@@ -74,29 +104,17 @@ export default class Theme {
   }
 
   static override(name, props) {
-    var plainObject = _.isPlainObject(props);
-    invariant((plainObject || _.isFunction(props)),
-      'Theme props must be plain object or function');
-    (templates[name] || (templates[name] = [])).push(plainObject ? ()=> props : props);
+    if (_.isPlainObject(props)) {
+      let propsObject = props;
+      props = ()=>[propsObject];
+    }
+    if (_.isArrayLike(props)) {
+      let propsArray = props;
+      props = ()=>propsArray;
+    }
+    invariant(_.isFunction(props), 'Theme props must be plain object or array like or function  that return plain object or array like');
+    (templates[name] || (templates[name] = [])).push(props);
     Theme.rebuild(name);
     return this;
   }
 };
-
-Theme.register(theme=>[{
-  brandColorDefault: "red",
-  brandColorAccent: "blue"
-}]);
-
-Theme.register(theme=>[{
-  brandColorAccent: "green",
-  dom2: {
-    "headerColor": theme("brandColorAccent", "black")
-  }
-}]);
-
-Theme.override("dark", theme=>[{
-  brandColorDefault: theme("dom2.headerColor")
-}]);
-
-console.log(Theme.get("dark")());

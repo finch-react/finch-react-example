@@ -8,19 +8,32 @@ import styles from './App.styles'
 
 export default class App extends StyledComponent {
   static defaultProps = {
-    styles: styles
+    open: true
   };
 
-  constructor(...args) {
-    super(...args);
-    this.state = {a:1};
-  }
+  styles = styles;
+
+  state = {
+    a: 1
+  };
 
   render() {
     return (
       <View>
-        <Text ref="text" onClick={()=>this.setState((s)=>({a:s.a+1}))}>Welcome to React Native in Web1</Text>
+        <Text>Welcome to React Native in Web!</Text>
+        <Text element="text" events="onClick, onPress">{this.state.a}Welcome to React Native in
+          Web1!</Text>
       </View>
-    )
+    );
+  }
+
+  text_onClick() {
+    this.setState(s=> ({
+      a: s.a + 1
+    }))
+  }
+
+  text_onPress() {
+    this.text_onClick();
   }
 }

@@ -13,5 +13,5 @@ export default class Theme extends Component {
 }
 
 Theme.childContextTypes = {
-  theme: React.PropTypes.string
+  theme: React.PropTypes.object
 };

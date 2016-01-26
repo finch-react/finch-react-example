@@ -5,7 +5,8 @@
     "start": "react-native start",
     "web-dev": "node web/start-dev-server",
     "web-bundle": "NODE_ENV=production webpack --config web/webpack.config.js --colors",
-    "server-bundle": "NODE_ENV=production webpack --config server/webpack.config.js --colors && node server/output/bundle.js"
+    "server": "npm run server-bundle && node server/output/bundle.js",
+    "server-bundle": "webpack --config server/webpack.config.js --colors"
   },
   "dependencies": {
     "react": "^0.14.6",

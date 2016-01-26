@@ -24,6 +24,7 @@ module.exports = {
   ip: IP,
   port: PORT,
   devtool: 'cheap-inline-source-map',
+  target: 'node',
   resolve: {
     alias: {
       'react-native': path.resolve(__dirname, "../../finch-react-server/src/index.js"),
@@ -33,16 +34,13 @@ module.exports = {
     },
     extensions: ['', '.js', '.jsx'],
   },
-  entry: isProd ? [
+  entry: [
     config.paths.index
-  ] : [
-    'webpack-dev-server/client?http://' + IP + ':' + PORT,
-    'webpack/hot/only-dev-server',
-    config.paths.index,
   ],
   output: {
     path: path.join(__dirname, 'output'),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    libraryTarget: 'commonjs2'
   },
   plugins: [
     new HasteResolverPlugin({
@@ -54,9 +52,9 @@ module.exports = {
         'NODE_ENV': JSON.stringify(isProd ? PROD : DEV),
       }
     }),
-    isProd ? new webpack.ProvidePlugin({
+    new webpack.ProvidePlugin({
       React: "react"
-    }) : new webpack.HotModuleReplacementPlugin(),
+    }),
     new webpack.NoErrorsPlugin(),
     new HtmlPlugin()
   ],

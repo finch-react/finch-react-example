@@ -4,14 +4,14 @@
   "scripts": {
     "start": "react-native start",
     "web-dev": "node web/start-dev-server",
-    "web-bundle": "NODE_ENV=production webpack --config web/webpack.config.js --colors"
+    "web-bundle": "NODE_ENV=production webpack --config web/webpack.config.js --colors",
+    "server-bundle": "NODE_ENV=production webpack --config server/webpack.config.js --colors && node server/output/bundle.js"
   },
   "dependencies": {
     "react": "^0.14.6",
     "react-dom": "^0.14.6",
     "react-native": "^0.17.0",
     "react-native-cli": "^0.1.10",
-    "react-web": "^0.1.3",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
     "babel-preset-stage-0": "^6.3.13",

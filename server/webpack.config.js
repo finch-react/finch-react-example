@@ -23,10 +23,12 @@ var config = {
 module.exports = {
   ip: IP,
   port: PORT,
-  devtool: 'source-map',
+  devtool: 'cheap-inline-source-map',
   resolve: {
     alias: {
-      'react-native': path.resolve(__dirname, "./react/index.js"),
+      'react-native': path.resolve(__dirname, "../../finch-react-server/src/index.js"),
+      'finch-react-web': path.resolve(__dirname, "../../finch-react-web/src/index.js"),
+      'finch-react-styles': path.resolve(__dirname, "../../finch-react-styles/src/index.js"),
       'ReactNativeART': 'react-art',
     },
     extensions: ['', '.js', '.jsx'],
@@ -56,25 +58,29 @@ module.exports = {
       React: "react"
     }) : new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
-    new HtmlPlugin(),
+    new HtmlPlugin()
   ],
   module: {
     loaders: [{
       test: /\.json$/,
-      loader: 'json',
+      loader: 'json'
     }, {
       test: /\.jsx?$/,
       loaders: ['react-hot', 'babel-loader?' + JSON.stringify({
-          cacheDirectory: true,
-          presets: ['es2015', 'stage-0', 'react'],
-          plugins: ['add-module-exports']
+        cacheDirectory: true,
+        presets: ['es2015', 'stage-0', 'react'],
+        plugins: ['add-module-exports']
       })],
-      include: [config.paths.src],
+      include: [
+        config.paths.src,
+        path.resolve(__dirname, "../../finch-react-styles/src/"),
+        path.resolve(__dirname, "../../finch-react-web/src/"),
+        path.resolve(__dirname, "../../finch-react-server/src/")
+      ],
       exclude: [
-        /node_modules(?!\/finch-react)/,
-        /finch-react-styles/,
+        /node_modules/,
         /output/
       ]
-    },]
+    }]
   }
 };

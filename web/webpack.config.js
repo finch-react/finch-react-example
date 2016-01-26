@@ -26,7 +26,7 @@ module.exports = {
   devtool: 'cheap-inline-source-map',
   resolve: {
     alias: {
-      'react-native': path.resolve(__dirname, "./react/index.js"),
+      'react-native': path.resolve(__dirname, "../../finch-react-web/src/index.js"),
       'finch-react-styles': path.resolve(__dirname, "../../finch-react-styles/src/index.js"),
       'ReactNativeART': 'react-art',
     },
@@ -72,8 +72,8 @@ module.exports = {
       })],
       include: [
         config.paths.src,
-        path.resolve(__dirname, "../../finch-react-styles/src/")
-        /*path.resolve(__dirname, "./node_modules/finch-react-styles/src/index.js")*/
+        path.resolve(__dirname, "../../finch-react-styles/src/"),
+        path.resolve(__dirname, "../../finch-react-web/src/")
       ],
       exclude: [
         /node_modules/,

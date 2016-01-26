@@ -1,4 +1,4 @@
-import Theme from './lib/Theme';
+import {Theme} from 'finch-react-styles';
 
 Theme.register({
   brandColorDefault: "red",

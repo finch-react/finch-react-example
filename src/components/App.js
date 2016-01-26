@@ -3,7 +3,7 @@ import React, {
   View,
   Text
 } from 'react-native';
-import StyledComponent from './StyledComponent';
+import {StyledComponent} from 'finch-react-styles';
 import styles from './App.styles'
 
 export default class App extends StyledComponent {
@@ -22,7 +22,7 @@ export default class App extends StyledComponent {
       <View>
         <Text>Welcome to React Native in Web!</Text>
         <Text element="text" events="onClick, onPress">{this.state.a}Welcome to React Native in
-          Web1!</Text>
+          Web!</Text>
       </View>
     );
   }

@@ -23,10 +23,11 @@ var config = {
 module.exports = {
   ip: IP,
   port: PORT,
-  devtool: 'source-map',
+  devtool: 'cheap-inline-source-map',
   resolve: {
     alias: {
       'react-native': path.resolve(__dirname, "./react/index.js"),
+      'finch-react-styles': path.resolve(__dirname, "../../finch-react-styles/src/index.js"),
       'ReactNativeART': 'react-art',
     },
     extensions: ['', '.js', '.jsx'],
@@ -69,10 +70,13 @@ module.exports = {
           presets: ['es2015', 'stage-0', 'react'],
           plugins: ['add-module-exports']
       })],
-      include: [config.paths.src],
+      include: [
+        config.paths.src,
+        path.resolve(__dirname, "../../finch-react-styles/src/")
+        /*path.resolve(__dirname, "./node_modules/finch-react-styles/src/index.js")*/
+      ],
       exclude: [
-        /node_modules(?!\/finch-react)/,
-        /finch-react-styles/,
+        /node_modules/,
         /output/
       ]
     },]

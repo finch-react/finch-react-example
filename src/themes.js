@@ -1,4 +1,5 @@
-import {Theme} from 'finch-react-styles';
+import FinchReactStyles from 'finch-react-styles';
+let {Theme} = FinchReactStyles;
 
 Theme.register({
   brandColorDefault: "red",

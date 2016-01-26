@@ -3,8 +3,10 @@ import React, {
   View,
   Text
 } from 'react-native';
-import {StyledComponent} from 'finch-react-styles';
+import FinchReactStyles from 'finch-react-styles';
+let  {StyledComponent} = FinchReactStyles;
 import styles from './App.styles'
+
 
 export default class App extends StyledComponent {
   static defaultProps = {
